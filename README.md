@@ -1,7 +1,6 @@
 [![GitHub Downloads](https://img.shields.io/github/downloads/smashedr/vue-extension/total?logo=github)](https://github.com/smashedr/vue-extension/releases)
 [![GitHub Release Version](https://img.shields.io/github/v/release/smashedr/vue-extension?logo=github)](https://github.com/smashedr/vue-extension/releases/latest)
 [![Workflow Release](https://img.shields.io/github/actions/workflow/status/smashedr/vue-extension/release.yaml?logo=norton&logoColor=white&label=release)](https://github.com/smashedr/vue-extension/actions/workflows/release.yaml)
-[![Workflow Test](https://img.shields.io/github/actions/workflow/status/smashedr/vue-extension/test.yaml?logo=norton&logoColor=white&label=test)](https://github.com/smashedr/vue-extension/actions/workflows/test.yaml)
 [![Workflow Lint](https://img.shields.io/github/actions/workflow/status/smashedr/vue-extension/lint.yaml?logo=norton&logoColor=white&label=lint)](https://github.com/smashedr/vue-extension/actions/workflows/lint.yaml)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/smashedr/vue-extension?logo=listenhub&label=updated)](https://github.com/smashedr/vue-extension/pulse)
 [![GitHub Repo Size](https://img.shields.io/github/repo-size/smashedr/vue-extension?logo=buffer&label=repo%20size)](https://github.com/smashedr/vue-extension?tab=readme-ov-file#readme)
@@ -31,7 +30,7 @@ Vue 3 and Vite plus CRXJS Web Extension Template.
 ## Install
 
 [![Chrome](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/chrome_48.png)](https://chromewebstore.google.com/detail/ifefifghpkllfibejafbakmflidjcjfp)
-[![Firefox](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/firefox_48.png)](https://github.com/smashedr/vue-extension/releases/latest/download/geo_image-firefox.xpi)
+[![Firefox](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/firefox_48.png)](https://github.com/smashedr/vue-extension/releases/latest/download/vue_extension-firefox.xpi)
 [![Edge](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/edge_48.png)](https://chromewebstore.google.com/detail/ifefifghpkllfibejafbakmflidjcjfp)
 [![Brave](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/brave_48.png)](https://chromewebstore.google.com/detail/ifefifghpkllfibejafbakmflidjcjfp)
 [![Opera](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/opera_48.png)](https://chromewebstore.google.com/detail/ifefifghpkllfibejafbakmflidjcjfp)
@@ -40,8 +39,8 @@ Vue 3 and Vite plus CRXJS Web Extension Template.
 All **Chromium** Based Browsers can install the extension from the
 [Chrome Web Store](https://chromewebstore.google.com/detail/ifefifghpkllfibejafbakmflidjcjfp).
 
-- Download a [Chrome Release](https://github.com/smashedr/vue-extension/releases/latest/download/geo_image-chrome.crx) from GitHub
-- Download a [Firefox Release](https://github.com/smashedr/vue-extension/releases/latest/download/geo_image-firefox.xpi) from GitHub
+- Download a [Chrome Release](https://github.com/smashedr/vue-extension/releases/latest/download/vue_extension-chrome.crx) from GitHub
+- Download a [Firefox Release](https://github.com/smashedr/vue-extension/releases/latest/download/vue_extension-firefox.xpi) from GitHub
 
 ## Features
 

@@ -1,23 +1,57 @@
 // src/background/index.ts
 
-import { defaultOptions, getOptions } from '../utils/options.ts'
+import { defaultOptions, getOptions } from '@/utils/options.ts'
 import { createContextMenus, onClicked } from '@/background/menus.ts'
 import { openExtPanel, openSidePanel } from '@/utils/extension.ts'
 
+chrome.runtime.onInstalled.addListener(onInstalled)
+chrome.runtime.onStartup.addListener(onStartup)
 chrome.contextMenus?.onClicked.addListener(onClicked)
 chrome.commands?.onCommand.addListener(onCommand)
+chrome.storage.onChanged.addListener(onChanged)
 
-chrome.runtime.onInstalled.addListener(async (details) => {
+async function onInstalled(details: chrome.runtime.InstalledDetails) {
   console.log('onInstalled:', details)
 
   const options = await setDefaultOptions(defaultOptions)
   console.debug('options:', options)
-  createContextMenus()
-})
 
-chrome.runtime.onStartup.addListener(() => {
+  if (options.contextMenu) createContextMenus()
+
+  const manifest = chrome.runtime.getManifest()
+  console.debug('manifest:', manifest)
+
+  await chrome.runtime.setUninstallURL(`${manifest.homepage_url}/issues`)
+
+  if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+    await chrome.runtime.openOptionsPage()
+  } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
+    if (options.showUpdate) {
+      if (manifest.version !== details.previousVersion) {
+        const url = `${manifest.homepage_url}/releases/tag/${manifest.version}`
+        await chrome.tabs.create({ active: false, url })
+      }
+    }
+  }
+}
+
+async function onStartup() {
   console.log('onStartup')
-})
+  if (
+    typeof browser !== 'undefined' &&
+    typeof browser?.runtime?.getBrowserInfo === 'function'
+  ) {
+    console.log('Firefox Startup Workarounds')
+    // NOTE: Confirm these checks are still necessary...
+    const options = await getOptions()
+    console.debug('options:', options)
+    if (options.contextMenu) createContextMenus()
+
+    const manifest = chrome.runtime.getManifest()
+    console.debug('manifest:', manifest)
+    await chrome.runtime.setUninstallURL(`${manifest.homepage_url}/issues`)
+  }
+}
 
 // NOTE: Below is ported from VanillaJS
 
@@ -50,5 +84,22 @@ async function onCommand(command: string, tab?: chrome.tabs.Tab) {
     openSidePanel()
   } else {
     console.warn(`Unknown Command: ${command}`)
+  }
+}
+
+function onChanged(changes: object, namespace: string) {
+  // console.debug('onChanged:', changes, namespace)
+  for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
+    if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
+      if (oldValue.contextMenu !== newValue.contextMenu) {
+        if (newValue?.contextMenu) {
+          console.log('%c Enabled contextMenu...', 'color: Lime')
+          createContextMenus()
+        } else {
+          console.log('%c Disabled contextMenu...', 'color: OrangeRed')
+          chrome.contextMenus?.removeAll()
+        }
+      }
+    }
   }
 }
