@@ -1,0 +1,135 @@
+export const defaultOptions = {
+  testInput: 'Default Value',
+  testNumber: 60,
+  contextMenu: true,
+  showUpdate: false,
+}
+
+export type Options = typeof defaultOptions & { [key: string]: unknown }
+
+export async function getOptions(): Promise<Options> {
+  let { options } = await chrome.storage.sync.get(['options'])
+  options = options || {}
+  return options as Options
+}
+
+// NOTE: Below is ported from VanillaJS
+
+/**
+ * Save Options Callback
+ * @function saveOptions
+ * @param {UIEvent} event
+ */
+export async function saveOptions(event: Event) {
+  console.debug('saveOptions:', event)
+  // const { options } = await chrome.storage.sync.get(['options'])
+  const options = await getOptions()
+  const target = event.target as HTMLInputElement
+  let key = target.id
+  let value
+  if (target.type === 'radio') {
+    key = target.name
+    // const radios = document.getElementsByName(key)
+    const radios = document.getElementsByName(key) as unknown as HTMLInputElement[]
+    for (const input of radios) {
+      if (input.checked) {
+        value = input.id
+        break
+      }
+    }
+  } else if (target.type === 'checkbox') {
+    value = target.checked
+  } else if (target.type === 'number') {
+    const number = Number.parseFloat(target.value)
+    let min = Number.parseFloat(target.min)
+    let max = Number.parseFloat(target.max)
+    if (!Number.isNaN(number) && number >= min && number <= max) {
+      target.value = number.toString()
+      value = number
+    } else {
+      target.value = String(options[target.id])
+      return
+    }
+  } else {
+    value = target.value
+  }
+  if (value !== undefined) {
+    options[key] = value
+    console.log(`Set %c${key}:`, 'color: Khaki', value)
+    await chrome.storage.sync.set({ options })
+  } else {
+    console.warn(`No Value for key: ${key}`)
+  }
+}
+
+export async function updateOptions() {
+  const options = await getOptions()
+  console.debug('updateOptions:', options)
+  for (let [key, value] of Object.entries(options)) {
+    if (value === undefined) {
+      console.warn('Value undefined for key:', key)
+      continue
+    }
+    // Option Key should be `radioXXX` and values should be the option IDs
+    if (key.startsWith('radio')) {
+      key = String(value) //NOSONAR
+      value = true //NOSONAR
+    }
+    // console.debug(`${key}: ${value}`)
+    const el = document.getElementById(key) as HTMLInputElement
+    if (!el) {
+      continue
+    }
+    if (el.tagName !== 'INPUT') {
+      el.textContent = String(value)
+    } else if (typeof value === 'boolean') {
+      el.checked = value
+    } else {
+      el.value = String(value)
+    }
+    // if (el.dataset.related) {
+    //   hideShowElement(`#${el.dataset.related}`, value)
+    // }
+  }
+}
+
+// function hideShowElement(selector: string, show: boolean, speed = 'fast') {
+//   const element = $(`${selector}`)
+//   // const element = document.querySelector(selector) as HTMLElement
+//   // console.debug('hideShowElement:', show, element)
+//   if (show) {
+//     element.show(speed)
+//   } else {
+//     element.hide(speed)
+//   }
+// }
+
+export async function setShortcuts(selector = '#keyboard-shortcuts') {
+  console.debug('setShortcuts')
+  if (!chrome.commands) {
+    return console.debug('Skipping: chrome.commands')
+  }
+  const table = document.querySelector(selector)
+  if (!table) {
+    return console.warn(`Table not found: ${selector}`)
+  }
+  table.classList.remove('d-none')
+  const tbody = table.querySelector('tbody')
+  const source = table.querySelector('tfoot > tr')?.cloneNode(true)
+  if (!tbody || !source) {
+    return console.warn(`Source element not found!`)
+  }
+  const commands = await chrome.commands.getAll()
+  for (const command of commands) {
+    // console.debug('command:', command)
+    const row = source.cloneNode(true) as Element
+    let description = command.description
+    // Note: Chrome does not parse the description for _execute_action in manifest.json
+    if (!description && command.name === '_execute_action') {
+      description = 'Open Popup' // NOTE: Also defined in: manifest.json
+    }
+    row.querySelector('.description')!.textContent = description ?? null
+    row.querySelector('kbd')!.textContent = command.shortcut || 'Not Set' // NOSONAR
+    tbody.appendChild(row)
+  }
+}
