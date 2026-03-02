@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { openExtPanel, openOptions, openSidePanel } from '@/utils/extension.ts'
 
+const props = withDefaults(
+  defineProps<{
+    closeWindow?: boolean
+  }>(),
+  {
+    closeWindow: false,
+  },
+)
+
 const manifest = chrome.runtime.getManifest()
 </script>
 
@@ -64,12 +73,22 @@ const manifest = chrome.runtime.getManifest()
       </div>
 
       <div class="ms-1" data-mobile-add="d-none">
-        <a title="Extension Panel" class="btn btn-sm btn-outline-info" role="button" @click="openExtPanel()">
+        <a
+          title="Extension Panel"
+          class="btn btn-sm btn-outline-info"
+          role="button"
+          @click="openExtPanel(props.closeWindow)"
+        >
           <i class="fa-regular fa-window-restore me-1"></i
         ></a>
       </div>
       <div class="ms-1" data-mobile-add="d-none">
-        <a title="Side Panel" class="btn btn-sm btn-outline-info" role="button" @click="openSidePanel(true)">
+        <a
+          title="Side Panel"
+          class="btn btn-sm btn-outline-info"
+          role="button"
+          @click="openSidePanel(props.closeWindow)"
+        >
           <i class="fa-solid fa-table-columns"></i
         ></a>
       </div>
