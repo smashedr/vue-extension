@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { saveOptions, setShortcuts, updateOptions } from '../utils/options.ts'
+import { copySupport, saveOptions, setShortcuts, updateOptions } from '../utils/options.ts'
 import BackToTop from '@/components/BackToTop.vue'
 import PermissionCheck from '@/components/PermissionCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
-import { showToast } from '@/utils/useToast.ts'
 
 console.debug('%c options/App.vue', 'color: Lime')
 
@@ -186,8 +185,7 @@ function openChromeShortcuts() {
         <PermissionCheck :show-remove="true" />
 
         <p class="fst-italic small mt-3">
-          <a id="copy-support" href="#0" @click="showToast('ti ekorb flar')">Copy Support Information</a> for issue
-          reporting.
+          <a id="copy-support" href="#0" @click="copySupport">Copy Support Information</a> for issue reporting.
         </p>
 
         <hr class="mt-0" />

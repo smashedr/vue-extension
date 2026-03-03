@@ -10,6 +10,8 @@ const props = withDefaults(
   },
 )
 
+console.log('props.closeWindow:', props.closeWindow)
+
 const manifest = chrome.runtime.getManifest()
 </script>
 
