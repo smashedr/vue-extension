@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { openExtPanel, openOptions, openSidePanel } from '@/utils/extension.ts'
+import { isMobile } from '@/utils/system.ts'
 
 const props = withDefaults(
   defineProps<{
@@ -74,7 +75,7 @@ const manifest = chrome.runtime.getManifest()
         >
       </div>
 
-      <div class="ms-1" data-mobile-add="d-none">
+      <div v-if="!isMobile" class="ms-1">
         <a
           title="Extension Panel"
           class="btn btn-sm btn-outline-info"
@@ -84,7 +85,7 @@ const manifest = chrome.runtime.getManifest()
           <i class="fa-regular fa-window-restore me-1"></i
         ></a>
       </div>
-      <div class="ms-1" data-mobile-add="d-none">
+      <div v-if="!isMobile" class="ms-1">
         <a
           title="Side Panel"
           class="btn btn-sm btn-outline-info"

@@ -1,9 +1,44 @@
 <script setup lang="ts">
-const isFirefox = typeof browser !== 'undefined' && typeof browser?.runtime?.getBrowserInfo === 'function'
-console.debug('isFirefox:', isFirefox)
+import { isFirefox } from '@/utils/system.ts'
+import { onMounted } from 'vue'
 
 function openChromeShortcuts() {
   chrome.tabs.update({ url: 'chrome://extensions/shortcuts' })
+}
+
+onMounted(() => {
+  setShortcuts()
+})
+
+// NOTE: Below is ported from VanillaJS
+async function setShortcuts(selector = '#keyboard-shortcuts') {
+  console.debug('setShortcuts')
+  if (!chrome.commands) {
+    return console.debug('Skipping: chrome.commands')
+  }
+  const table = document.querySelector(selector)
+  if (!table) {
+    return console.warn(`Table not found: ${selector}`)
+  }
+  table.classList.remove('d-none')
+  const tbody = table.querySelector('tbody')
+  const source = table.querySelector('tfoot > tr')?.cloneNode(true)
+  if (!tbody || !source) {
+    return console.warn(`Source element not found!`)
+  }
+  const commands = await chrome.commands.getAll()
+  for (const command of commands) {
+    // console.debug('command:', command)
+    const row = source.cloneNode(true) as Element
+    let description = command.description
+    // Note: Chrome does not parse the description for _execute_action in manifest.json
+    if (!description && command.name === '_execute_action') {
+      description = 'Open Popup' // NOTE: Also defined in: manifest.json
+    }
+    row.querySelector('.description')!.textContent = description ?? null
+    row.querySelector('kbd')!.textContent = command.shortcut || 'Not Set' // NOSONAR
+    tbody.appendChild(row)
+  }
 }
 </script>
 

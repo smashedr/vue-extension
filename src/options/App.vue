@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { copySupport, setShortcuts } from '../utils/options.ts'
+import { copySupport } from '../utils/options.ts'
 
 import BackToTop from '@/components/BackToTop.vue'
 import PermissionCheck from '@/components/PermissionCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
 import OptionsControls from '@/components/OptionsControls.vue'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts.vue'
+import { isMobile } from '@/utils/system.ts'
 
 console.debug('%c options/App.vue', 'color: Lime')
-
-onMounted(() => {
-  setShortcuts()
-})
 
 const manifest = chrome.runtime.getManifest()
 console.debug('manifest:', manifest)
@@ -60,7 +56,7 @@ console.debug('manifest:', manifest)
         </div>
         <!-- header -->
 
-        <div data-mobile-add="d-none">
+        <template v-if="!isMobile">
           <div class="d-flex flex-row align-items-center justify-content-center">
             <hr class="w-100 my-0" />
             <span class="text-nowrap mx-2">Keyboard Shortcuts</span>
@@ -68,8 +64,7 @@ console.debug('manifest:', manifest)
           </div>
 
           <KeyboardShortcuts />
-        </div>
-        <!-- data-mobile-add -->
+        </template>
 
         <div class="d-flex flex-row align-items-center justify-content-center">
           <hr class="w-100 my-0" />

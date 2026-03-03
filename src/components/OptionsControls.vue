@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { saveOptions, updateOptions } from '@/utils/options.ts'
+import { isMobile } from '@/utils/system.ts'
 
 chrome.storage.onChanged.addListener(onChanged)
 
@@ -62,7 +63,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="form-check form-switch" data-mobile-add="d-none">
+    <div v-if="!isMobile" class="form-check form-switch">
       <input class="form-check-input" id="contextMenu" type="checkbox" role="switch" @change="saveOptions" />
       <label class="form-check-label" for="contextMenu">Enable Right Click Menu</label>
       <i
