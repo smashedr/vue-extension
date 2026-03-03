@@ -110,3 +110,11 @@ export async function openExtPanel(close = false) {
   }
   if (close) window.close()
 }
+
+// export async function checkPerms(manifest: chrome.runtime.Manifest) {
+//   // const manifest = chrome.runtime.getManifest()
+//   console.debug('checkPerms:', manifest.host_permissions)
+//   return chrome.permissions.contains({
+//     origins: manifest.host_permissions,
+//   })
+// }

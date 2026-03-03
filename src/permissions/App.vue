@@ -1,0 +1,52 @@
+<script setup lang="ts">
+import BackToTop from '@/components/BackToTop.vue'
+import PermsCheck from '@/components/PermsCheck.vue'
+import ToastAlerts from '@/components/ToastAlerts.vue'
+import { openOptions } from '@/utils/extension.ts'
+import FooterPanel from '@/components/FooterPanel.vue'
+
+console.debug('%c options/App.vue', 'color: Lime')
+
+const manifest = chrome.runtime.getManifest()
+console.debug('manifest:', manifest)
+</script>
+
+<template>
+  <!-- NOTE: Below is ported from VanillaJS -->
+
+  <div class="container-fluid p-3 h-100">
+    <div class="d-flex align-items-center h-100">
+      <div class="col-xl-6 col-md-8 col-12 m-auto">
+        <div class="card p-3 text-center">
+          <div class="d-flex justify-content-center align-items-center">
+            <img src="/images/logo48.png" class="me-2" height="48" width="48" alt="GeoImage" title="GeoImage" />
+            <h1>GeoImage</h1>
+          </div>
+
+          <PermsCheck :show-alert="true" :show-remove="true" />
+
+          <p>To download an image on Chrome for upload to the API, host permissions are required.</p>
+          <a class="btn btn-lg btn-outline-info w-100 mb-3" href="/src/options/index.html" @click="openOptions(true)">
+            <i class="fa-solid fa-sliders me-1"></i> Open Options</a
+          >
+
+          <hr class="mt-0" />
+
+          <FooterPanel />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ToastAlerts />
+
+  <BackToTop />
+</template>
+
+<!--<style scoped>-->
+<!--body {-->
+<!--  min-width: 340px;-->
+<!--  width: 100%;-->
+<!--  max-width: 100vw;-->
+<!--}-->
+<!--</style>-->

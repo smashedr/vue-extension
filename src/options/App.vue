@@ -7,6 +7,7 @@ import ToastAlerts from '@/components/ToastAlerts.vue'
 import OptionsControls from '@/components/OptionsControls.vue'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts.vue'
 import { isMobile } from '@/utils/system.ts'
+import FooterPanel from '@/components/FooterPanel.vue'
 
 console.debug('%c options/App.vue', 'color: Lime')
 
@@ -82,31 +83,8 @@ console.debug('manifest:', manifest)
 
         <hr class="mt-0" />
 
-        <div class="text-center">
-          <a
-            class="link-body-emphasis text-decoration-none d-inline-block"
-            target="_blank"
-            rel="noopener"
-            :href="manifest.homepage_url"
-            >Home Page</a
-          >
-          <span class="mx-1">&bull;</span>
-          <a
-            class="link-body-emphasis text-decoration-none d-inline-block"
-            target="_blank"
-            rel="noopener"
-            href="https://github.com/smashedr/vue-extension/issues/new?template=1-feature.yaml"
-            >Request Feature</a
-          >
-          <span class="mx-1">&bull;</span>
-          <a
-            class="link-body-emphasis text-decoration-none d-inline-block"
-            target="_blank"
-            rel="noopener"
-            href="https://github.com/smashedr/vue-extension/issues"
-            >Open Issue</a
-          >
-        </div>
+        <FooterPanel />
+
         <!-- #options-wrapper -->
       </div>
     </div>

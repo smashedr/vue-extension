@@ -2,7 +2,7 @@
 import { openExtPanel, openOptions, openSidePanel } from '@/utils/extension.ts'
 import { showToast } from '@/utils/useToast.ts'
 
-import PanelHeader from '@/components/PanelHeader.vue'
+import HeaderPanel from '@/components/HeaderPanel.vue'
 import PermsCheck from '@/components/PermsCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
 import OptionsControls from '@/components/OptionsControls.vue'
@@ -12,7 +12,7 @@ console.debug('%c popup/App.vue', 'color: Lime')
 </script>
 
 <template>
-  <PanelHeader :close-window="true" />
+  <HeaderPanel :close-window="true" />
 
   <div class="container p-3">
     <div class="d-grid g-2 gap-2 mb-2">
