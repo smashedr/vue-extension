@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { openExtPanel, openOptions, openSidePanel } from '@/utils/extension.ts'
-import PanelHeader from '@/components/PanelHeader.vue'
-import PermissionCheck from '@/components/PermissionCheck.vue'
-import ToastAlerts from '@/components/ToastAlerts.vue'
 import { showToast } from '@/utils/useToast.ts'
+
+import PanelHeader from '@/components/PanelHeader.vue'
+import PermsCheck from '@/components/PermsCheck.vue'
+import ToastAlerts from '@/components/ToastAlerts.vue'
+import OptionsControls from '@/components/OptionsControls.vue'
+import { isMobile } from '@/utils/system.ts'
 
 console.debug('%c popup/App.vue', 'color: Lime')
 </script>
@@ -19,34 +22,26 @@ console.debug('%c popup/App.vue', 'color: Lime')
         <i class="fa-regular fa-window-maximize me-1"></i>
         <span class="flex-fill text-center me-4">Show Factual Toast</span>
       </a>
-      <a
-        class="btn btn-primary d-flex align-items-center hvr-grow-sm"
-        data-mobile-add="d-none"
-        @click="openExtPanel(true)"
-      >
+      <a v-if="!isMobile" class="btn btn-primary d-flex align-items-center hvr-grow-sm" @click="openExtPanel(true)">
         <i class="fa-regular fa-window-restore me-1"></i>
         <span class="flex-fill text-center me-4">Open Extension Panel</span>
       </a>
-      <a
-        class="btn btn-primary d-flex align-items-center hvr-grow-sm"
-        data-mobile-add="d-none"
-        @click="openSidePanel(true)"
-      >
+      <a v-if="!isMobile" class="btn btn-primary d-flex align-items-center hvr-grow-sm" @click="openSidePanel(true)">
         <i class="fa-solid fa-table-columns me-1"></i>
         <span class="flex-fill text-center me-4">Open Side Panel</span>
       </a>
-      <a class="btn btn-primary d-flex align-items-center hvr-grow-sm" data-mobile-add="d-none" @click="openOptions()">
-        <i class="fa-solid fa-cog me-1"></i>
-        <span class="flex-fill text-center me-4">Open Options</span>
-      </a>
     </div>
 
-    <div class="alert alert-info text-center p-2 mb-0" role="alert">
-      Options have not yet been ported to a Vue Component but work on the Options page.
-    </div>
-    <!-- d-grid -->
+    <hr />
 
-    <PermissionCheck :close-window="true" />
+    <OptionsControls :compact="true" class="mb-2" />
+
+    <a class="btn btn-outline-info d-flex align-items-center hvr-grow-sm" @click="openOptions(true)">
+      <i class="fa-solid fa-sliders me-1"></i>
+      <span class="flex-fill text-center me-4">More Options</span>
+    </a>
+
+    <PermsCheck :close-window="true" />
   </div>
 
   <ToastAlerts />

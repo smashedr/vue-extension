@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useToast } from '../utils/useToast.ts'
-const { toasts, removeToast } = useToast()
 import * as bootstrap from 'bootstrap'
+
+const { toasts, removeToast } = useToast()
 
 // noinspection JSUnusedGlobalSymbols
 const vToast = {

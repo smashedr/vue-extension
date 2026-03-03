@@ -15,7 +15,7 @@ const props = withDefaults(
   },
 )
 
-const hasPerms = ref(false)
+const hasPerms = ref(true)
 
 const manifest = chrome.runtime.getManifest()
 console.log('host_permissions:', manifest.host_permissions)

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-// import Logo from '@/assets/crx.svg'
 import { ref } from 'vue'
+// import Logo from '@/assets/crx.svg'
 
 const show = ref(false)
+
 const toggle = () => (show.value = !show.value)
 </script>
 

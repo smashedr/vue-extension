@@ -1,8 +1,9 @@
 // src/background/index.ts
 
-import { defaultOptions, getOptions } from '@/utils/options.ts'
 import { createContextMenus, onClicked } from '@/background/menus.ts'
 import { openExtPanel, openSidePanel } from '@/utils/extension.ts'
+import { defaultOptions, getOptions } from '@/utils/options.ts'
+import { isFirefox } from '@/utils/system.ts'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.runtime.onStartup.addListener(onStartup)
@@ -37,10 +38,7 @@ async function onInstalled(details: chrome.runtime.InstalledDetails) {
 
 async function onStartup() {
   console.log('onStartup')
-  if (
-    typeof browser !== 'undefined' &&
-    typeof browser?.runtime?.getBrowserInfo === 'function'
-  ) {
+  if (isFirefox) {
     console.log('Firefox Startup Workarounds')
     // NOTE: Confirm these checks are still necessary...
     const options = await getOptions()
