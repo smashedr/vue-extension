@@ -1,6 +1,6 @@
 {
   "name": "vue-extension",
-  "description": "Vue 3 and Vite plus CRXJS Web Extension Template.",
+  "description": "Vue 3 and Vite plus CRXJS Web Extension Template for Chrome, Firefox, and Firefox Android.",
   "version": "0.0.1",
   "type": "module",
   "private": true,
