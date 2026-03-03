@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { openExtPanel, openOptions, openSidePanel } from '@/utils/extension.ts'
+import { showToast } from '@/utils/useToast.ts'
+
 import PanelHeader from '@/components/PanelHeader.vue'
 import PermissionCheck from '@/components/PermissionCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
-import { showToast } from '@/utils/useToast.ts'
+import OptionsControls from '@/components/OptionsControls.vue'
 
 console.debug('%c popup/App.vue', 'color: Lime')
 </script>
@@ -35,16 +37,20 @@ console.debug('%c popup/App.vue', 'color: Lime')
         <i class="fa-solid fa-table-columns me-1"></i>
         <span class="flex-fill text-center me-4">Open Side Panel</span>
       </a>
-      <a class="btn btn-primary d-flex align-items-center hvr-grow-sm" data-mobile-add="d-none" @click="openOptions()">
-        <i class="fa-solid fa-cog me-1"></i>
-        <span class="flex-fill text-center me-4">Open Options</span>
-      </a>
     </div>
 
-    <div class="alert alert-info text-center p-2 mb-0" role="alert">
-      Options have not yet been ported to a Vue Component but work on the Options page.
-    </div>
-    <!-- d-grid -->
+    <hr />
+
+    <OptionsControls :compact="true" class="mb-2" />
+
+    <a
+      class="btn btn-outline-info d-flex align-items-center hvr-grow-sm"
+      data-mobile-add="d-none"
+      @click="openOptions()"
+    >
+      <i class="fa-solid fa-sliders me-1"></i>
+      <span class="flex-fill text-center me-4">More Options</span>
+    </a>
 
     <PermissionCheck :close-window="true" />
   </div>

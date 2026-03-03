@@ -4,7 +4,6 @@ import { onMounted, ref } from 'vue'
 const backToTop = ref<HTMLElement | null>(null)
 
 const onScroll = () => {
-  // console.log('onScroll:', backToTop.value)
   if (!backToTop.value) return
   if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
     backToTop.value.style.display = 'block'
@@ -22,7 +21,6 @@ function debounce<T extends (...args: unknown[]) => unknown>(fn: T, timeout = 25
 }
 
 onMounted(() => {
-  // console.log('onMounted: window.addEventListener')
   window.addEventListener('scroll', debounce(onScroll))
 })
 
