@@ -8,11 +8,13 @@ const props = withDefaults(
   defineProps<{
     closeWindow?: boolean
     showAlert?: boolean
+    showInfo?: boolean
     showRemove?: boolean
   }>(),
   {
     closeWindow: false,
     showAlert: false,
+    showInfo: false,
     showRemove: false,
   },
 )
@@ -84,7 +86,7 @@ onUnmounted(() => {
     >
       <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions
     </button>
-    <!--<p class="text-center"><a href="../html/permissions.html">More Information on Permissions</a></p>-->
+    <p v-if="showInfo" class="text-center"><a href="/src/permissions/index.html">More Information on Permissions</a></p>
   </div>
 
   <div v-if="hasPerms && props.showAlert" class="alert alert-success mt-3 mb-0" role="alert">Permissions Granted.</div>

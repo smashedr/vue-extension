@@ -13,6 +13,7 @@ console.debug('%c options/App.vue', 'color: Lime')
 
 const manifest = chrome.runtime.getManifest()
 console.debug('manifest:', manifest)
+document.title = `${manifest.name} Options`
 </script>
 
 <template>
@@ -75,7 +76,7 @@ console.debug('manifest:', manifest)
 
         <OptionsControls />
 
-        <PermsCheck :show-remove="true" />
+        <PermsCheck :show-info="true" :show-remove="true" />
 
         <p class="fst-italic small mt-3">
           <a id="copy-support" href="#0" @click="copySupport">Copy Support Information</a> for issue reporting.

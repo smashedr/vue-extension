@@ -1,14 +1,26 @@
 <script setup lang="ts">
+import { openOptions } from '@/utils/extension.ts'
+
 import BackToTop from '@/components/BackToTop.vue'
 import PermsCheck from '@/components/PermsCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
-import { openOptions } from '@/utils/extension.ts'
 import FooterPanel from '@/components/FooterPanel.vue'
 
 console.debug('%c options/App.vue', 'color: Lime')
 
+chrome.permissions.onAdded.addListener(onAdded)
+
+async function onAdded(permissions: chrome.permissions.Permissions) {
+  console.debug('onAdded:', permissions)
+  if (document.hasFocus()) {
+    await chrome.runtime.openOptionsPage()
+  }
+  window.close()
+}
+
 const manifest = chrome.runtime.getManifest()
 console.debug('manifest:', manifest)
+document.title = `${manifest.name} Permissions`
 </script>
 
 <template>
