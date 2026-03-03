@@ -96,7 +96,13 @@ const manifest = chrome.runtime.getManifest()
         ></a>
       </div>
       <div class="ms-1">
-        <a title="Options" class="btn btn-sm btn-outline-info" role="button" target="_blank" @click="openOptions">
+        <a
+          title="Options"
+          class="btn btn-sm btn-outline-info"
+          role="button"
+          target="_blank"
+          @click="openOptions(props.closeWindow)"
+        >
           <i class="fa-solid fa-gears"></i
         ></a>
       </div>

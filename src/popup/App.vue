@@ -3,7 +3,7 @@ import { openExtPanel, openOptions, openSidePanel } from '@/utils/extension.ts'
 import { showToast } from '@/utils/useToast.ts'
 
 import PanelHeader from '@/components/PanelHeader.vue'
-import PermissionCheck from '@/components/PermissionCheck.vue'
+import PermsCheck from '@/components/PermsCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
 import OptionsControls from '@/components/OptionsControls.vue'
 import { isMobile } from '@/utils/system.ts'
@@ -36,12 +36,12 @@ console.debug('%c popup/App.vue', 'color: Lime')
 
     <OptionsControls :compact="true" class="mb-2" />
 
-    <a class="btn btn-outline-info d-flex align-items-center hvr-grow-sm" @click="openOptions()">
+    <a class="btn btn-outline-info d-flex align-items-center hvr-grow-sm" @click="openOptions(true)">
       <i class="fa-solid fa-sliders me-1"></i>
       <span class="flex-fill text-center me-4">More Options</span>
     </a>
 
-    <PermissionCheck :close-window="true" />
+    <PermsCheck :close-window="true" />
   </div>
 
   <ToastAlerts />

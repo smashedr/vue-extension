@@ -17,14 +17,20 @@ export function openSidePanel(close?: boolean) {
   } else if (chrome.sidebarAction) {
     console.debug('chrome.sidebarAction')
     chrome.sidebarAction.open()
+    if (close) window.close()
   } else {
     console.log('Side Panel Not Supported')
   }
 }
 
-export function openOptions() {
+export function openOptions(close = false) {
   console.debug('openOptions')
-  chrome.runtime.openOptionsPage().catch((e) => console.warn(e))
+  chrome.runtime
+    .openOptionsPage()
+    .then(() => {
+      if (close) window.close()
+    })
+    .catch((e) => console.warn(e))
 }
 
 export async function openPopup(event: Event | null) {
@@ -59,8 +65,8 @@ export async function openExtPanel(close = false) {
   // })
 
   const panelPath = 'src/sidepanel/index.html'
-  const [defaultWidth, defaultHeight] = [340, 600]
-  const type = chrome.windows.CreateType.PANEL
+  const [defaultWidth, defaultHeight] = [390, 600]
+  const type = chrome.windows.CreateType.POPUP
 
   if (!chrome.windows) {
     console.log('Browser does not support: chrome.windows')

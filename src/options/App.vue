@@ -2,7 +2,7 @@
 import { copySupport } from '../utils/options.ts'
 
 import BackToTop from '@/components/BackToTop.vue'
-import PermissionCheck from '@/components/PermissionCheck.vue'
+import PermsCheck from '@/components/PermsCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
 import OptionsControls from '@/components/OptionsControls.vue'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts.vue'
@@ -74,7 +74,7 @@ console.debug('manifest:', manifest)
 
         <OptionsControls />
 
-        <PermissionCheck :show-remove="true" />
+        <PermsCheck :show-remove="true" />
 
         <p class="fst-italic small mt-3">
           <a id="copy-support" href="#0" @click="copySupport">Copy Support Information</a> for issue reporting.
