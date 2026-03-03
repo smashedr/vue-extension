@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-
 import { useToast } from '@/utils/useToast'
+
 const { showToast } = useToast()
 
 const props = withDefaults(

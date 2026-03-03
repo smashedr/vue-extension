@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { copySupport } from '../utils/options.ts'
+import { isMobile } from '@/utils/system.ts'
 
 import BackToTop from '@/components/BackToTop.vue'
 import PermsCheck from '@/components/PermsCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
 import OptionsControls from '@/components/OptionsControls.vue'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts.vue'
-import { isMobile } from '@/utils/system.ts'
 import FooterPanel from '@/components/FooterPanel.vue'
 
 console.debug('%c options/App.vue', 'color: Lime')
@@ -17,8 +17,6 @@ document.title = `${manifest.name} Options`
 </script>
 
 <template>
-  <!-- NOTE: Below is ported from VanillaJS -->
-
   <div class="d-flex align-items-center justify-content-center p-1 p-sm-3 h-100 w-100">
     <div class="m-auto pb-4 w-100">
       <div
@@ -56,7 +54,6 @@ document.title = `${manifest.name} Options`
             >
           </div>
         </div>
-        <!-- header -->
 
         <template v-if="!isMobile">
           <div class="d-flex flex-row align-items-center justify-content-center">
@@ -96,10 +93,4 @@ document.title = `${manifest.name} Options`
   <BackToTop />
 </template>
 
-<!--<style scoped>-->
-<!--body {-->
-<!--  min-width: 340px;-->
-<!--  width: 100%;-->
-<!--  max-width: 100vw;-->
-<!--}-->
-<!--</style>-->
+<!--<style scoped></style>-->

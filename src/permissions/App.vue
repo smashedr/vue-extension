@@ -24,8 +24,6 @@ document.title = `${manifest.name} Permissions`
 </script>
 
 <template>
-  <!-- NOTE: Below is ported from VanillaJS -->
-
   <div class="container-fluid p-3 h-100">
     <div class="d-flex align-items-center h-100">
       <div class="col-xl-6 col-md-8 col-12 m-auto">
@@ -55,10 +53,4 @@ document.title = `${manifest.name} Permissions`
   <BackToTop />
 </template>
 
-<!--<style scoped>-->
-<!--body {-->
-<!--  min-width: 340px;-->
-<!--  width: 100%;-->
-<!--  max-width: 100vw;-->
-<!--}-->
-<!--</style>-->
+<!--<style scoped></style>-->

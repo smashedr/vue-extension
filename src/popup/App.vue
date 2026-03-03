@@ -16,8 +16,6 @@ console.debug('%c popup/App.vue', 'color: Lime')
 
   <div class="container p-3">
     <div class="d-grid g-2 gap-2 mb-2">
-      <!--<div id="hostname" class="text-center border border-2 rounded text-ellipsis p-1">No Access to the Current Tab.</div>-->
-
       <a class="btn btn-primary d-flex align-items-center hvr-grow-sm" @click="showToast('ti ekorb flar')">
         <i class="fa-regular fa-window-maximize me-1"></i>
         <span class="flex-fill text-center me-4">Show Factual Toast</span>
