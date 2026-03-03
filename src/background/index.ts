@@ -25,7 +25,18 @@ async function onInstalled(details: chrome.runtime.InstalledDetails) {
   await chrome.runtime.setUninstallURL(`${manifest.homepage_url}/issues`)
 
   if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-    await chrome.runtime.openOptionsPage()
+    // await chrome.runtime.openOptionsPage()
+    // const hasPerms = await checkPerms(manifest)
+    const hasPerms = await chrome.permissions.contains({
+      origins: manifest.host_permissions,
+    })
+    console.debug('hasPerms:', hasPerms)
+    if (hasPerms) {
+      await chrome.runtime.openOptionsPage()
+    } else {
+      const url = chrome.runtime.getURL('/src/permissions/index.html')
+      await chrome.tabs.create({ active: true, url })
+    }
   } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
     if (options.showUpdate) {
       if (manifest.version !== details.previousVersion) {

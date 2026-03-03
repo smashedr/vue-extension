@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-
 import { useToast } from '@/utils/useToast'
+
 const { showToast } = useToast()
 
 const props = withDefaults(
   defineProps<{
     closeWindow?: boolean
+    showAlert?: boolean
+    showInfo?: boolean
     showRemove?: boolean
   }>(),
   {
     closeWindow: false,
+    showAlert: false,
+    showInfo: false,
     showRemove: false,
   },
 )
@@ -20,11 +24,11 @@ const hasPerms = ref(true)
 const manifest = chrome.runtime.getManifest()
 console.log('host_permissions:', manifest.host_permissions)
 
-async function checkPerms() {
+async function updatePerms() {
   hasPerms.value = await chrome.permissions.contains({
     origins: manifest.host_permissions,
   })
-  console.log('checkPerms:', hasPerms.value)
+  console.log('updatePerms:', hasPerms.value)
 }
 
 async function grantPerms(event: Event) {
@@ -44,7 +48,7 @@ async function revokePerms(event: Event) {
     await chrome.permissions.remove({
       origins: permissions.origins,
     })
-    await checkPerms()
+    await updatePerms()
   } catch (e) {
     console.log(e)
     if (e instanceof Error) showToast(e.toString(), 'danger')
@@ -58,14 +62,14 @@ async function requestPerms() {
 }
 
 onMounted(() => {
-  checkPerms()
-  chrome.permissions.onAdded.addListener(checkPerms)
-  chrome.permissions.onRemoved.addListener(checkPerms)
+  updatePerms()
+  chrome.permissions.onAdded.addListener(updatePerms)
+  chrome.permissions.onRemoved.addListener(updatePerms)
 })
 
 onUnmounted(() => {
-  chrome.permissions.onAdded.removeListener(checkPerms)
-  chrome.permissions.onRemoved.removeListener(checkPerms)
+  chrome.permissions.onAdded.removeListener(updatePerms)
+  chrome.permissions.onRemoved.removeListener(updatePerms)
 })
 </script>
 
@@ -82,8 +86,11 @@ onUnmounted(() => {
     >
       <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions
     </button>
-    <!--<p class="text-center"><a href="../html/permissions.html">More Information on Permissions</a></p>-->
+    <p v-if="showInfo" class="text-center"><a href="/src/permissions/index.html">More Information on Permissions</a></p>
   </div>
+
+  <div v-if="hasPerms && props.showAlert" class="alert alert-success mt-3 mb-0" role="alert">Permissions Granted.</div>
+
   <div v-if="hasPerms && props.showRemove" class="my-3">
     <button
       class="btn btn-link link-danger revoke-permissions"
@@ -97,7 +104,6 @@ onUnmounted(() => {
       Remove Host Permissions
     </button>
   </div>
-  <!-- grant-perms -->
 </template>
 
 <!--<style scoped></style>-->

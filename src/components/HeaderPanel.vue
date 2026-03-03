@@ -107,7 +107,6 @@ const manifest = chrome.runtime.getManifest()
         ></a>
       </div>
     </div>
-    <!-- d-flex -->
   </div>
   <!-- container-fluid -->
 

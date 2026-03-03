@@ -23,6 +23,13 @@ export default defineConfig({
       origin: [/chrome-extension:\/\//],
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        permissions: 'src/permissions/index.html',
+      },
+    },
+  },
   // NOTE: This silences bootstrap deprecation warnings
   css: {
     preprocessorOptions: {

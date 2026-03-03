@@ -36,7 +36,7 @@ async function setShortcuts(selector = '#keyboard-shortcuts') {
       description = 'Open Popup' // NOTE: Also defined in: manifest.json
     }
     row.querySelector('.description')!.textContent = description ?? null
-    row.querySelector('kbd')!.textContent = command.shortcut || 'Not Set' // NOSONAR
+    row.querySelector('kbd')!.textContent = command.shortcut || 'Not Set'
     tbody.appendChild(row)
   }
 }

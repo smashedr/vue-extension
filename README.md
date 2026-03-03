@@ -25,7 +25,7 @@
 - [Support](#support)
 - [Contributing](#contributing)
 
-Vue 3 and Vite plus CRXJS Web Extension Template.
+Vue 3 and Vite plus CRXJS Web Extension Template for Chrome, Firefox, and Firefox Android.
 
 ## Install
 

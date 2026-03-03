@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import { copySupport } from '../utils/options.ts'
+import { isMobile } from '@/utils/system.ts'
 
 import BackToTop from '@/components/BackToTop.vue'
 import PermsCheck from '@/components/PermsCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
 import OptionsControls from '@/components/OptionsControls.vue'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts.vue'
-import { isMobile } from '@/utils/system.ts'
+import FooterPanel from '@/components/FooterPanel.vue'
 
 console.debug('%c options/App.vue', 'color: Lime')
 
 const manifest = chrome.runtime.getManifest()
 console.debug('manifest:', manifest)
+document.title = `${manifest.name} Options`
 </script>
 
 <template>
-  <!-- NOTE: Below is ported from VanillaJS -->
-
   <div class="d-flex align-items-center justify-content-center p-1 p-sm-3 h-100 w-100">
     <div class="m-auto pb-4 w-100">
       <div
@@ -54,7 +54,6 @@ console.debug('manifest:', manifest)
             >
           </div>
         </div>
-        <!-- header -->
 
         <template v-if="!isMobile">
           <div class="d-flex flex-row align-items-center justify-content-center">
@@ -74,7 +73,7 @@ console.debug('manifest:', manifest)
 
         <OptionsControls />
 
-        <PermsCheck :show-remove="true" />
+        <PermsCheck :show-info="true" :show-remove="true" />
 
         <p class="fst-italic small mt-3">
           <a id="copy-support" href="#0" @click="copySupport">Copy Support Information</a> for issue reporting.
@@ -82,31 +81,8 @@ console.debug('manifest:', manifest)
 
         <hr class="mt-0" />
 
-        <div class="text-center">
-          <a
-            class="link-body-emphasis text-decoration-none d-inline-block"
-            target="_blank"
-            rel="noopener"
-            :href="manifest.homepage_url"
-            >Home Page</a
-          >
-          <span class="mx-1">&bull;</span>
-          <a
-            class="link-body-emphasis text-decoration-none d-inline-block"
-            target="_blank"
-            rel="noopener"
-            href="https://github.com/smashedr/vue-extension/issues/new?template=1-feature.yaml"
-            >Request Feature</a
-          >
-          <span class="mx-1">&bull;</span>
-          <a
-            class="link-body-emphasis text-decoration-none d-inline-block"
-            target="_blank"
-            rel="noopener"
-            href="https://github.com/smashedr/vue-extension/issues"
-            >Open Issue</a
-          >
-        </div>
+        <FooterPanel />
+
         <!-- #options-wrapper -->
       </div>
     </div>
@@ -117,10 +93,4 @@ console.debug('manifest:', manifest)
   <BackToTop />
 </template>
 
-<!--<style scoped>-->
-<!--body {-->
-<!--  min-width: 340px;-->
-<!--  width: 100%;-->
-<!--  max-width: 100vw;-->
-<!--}-->
-<!--</style>-->
+<!--<style scoped></style>-->
