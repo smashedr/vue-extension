@@ -1,3 +1,5 @@
+import { showToast } from '@/utils/useToast.ts'
+
 export const defaultOptions = {
   testInput: 'Default Value',
   testNumber: 60,
@@ -132,4 +134,29 @@ export async function setShortcuts(selector = '#keyboard-shortcuts') {
     row.querySelector('kbd')!.textContent = command.shortcut || 'Not Set' // NOSONAR
     tbody.appendChild(row)
   }
+}
+
+export async function copySupport(event: Event) {
+  console.debug('copySupport:', event)
+  event.preventDefault()
+  const manifest = chrome.runtime.getManifest()
+  const permissions = await chrome.permissions.getAll()
+  const { options } = await getOptions()
+  // delete options.authToken
+
+  const local = await chrome.storage.local.get()
+
+  const result = [
+    `${manifest.name} - ${manifest.version}`,
+    navigator.userAgent,
+    `permissions.origins: ${JSON.stringify(permissions.origins)}`,
+    `options: ${JSON.stringify(options)}`,
+    `local: ${JSON.stringify(local)}`,
+  ]
+  const commands = await chrome.commands?.getAll()
+  if (commands) {
+    result.push(`commands: ${JSON.stringify(commands)}`)
+  }
+  await navigator.clipboard.writeText(result.join('\n'))
+  showToast('Support Information Copied.')
 }

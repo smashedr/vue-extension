@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { saveOptions, setShortcuts, updateOptions } from '../utils/options.ts'
+import { copySupport, saveOptions, setShortcuts, updateOptions } from '../utils/options.ts'
 import BackToTop from '@/components/BackToTop.vue'
+import PermissionCheck from '@/components/PermissionCheck.vue'
+import ToastAlerts from '@/components/ToastAlerts.vue'
 
 console.debug('%c options/App.vue', 'color: Lime')
 
@@ -19,11 +21,11 @@ console.debug('isFirefox:', isFirefox)
 function openChromeShortcuts() {
   chrome.tabs.update({ url: 'chrome://extensions/shortcuts' })
 }
-
-// NOTE: Below is ported from VanillaJS
 </script>
 
 <template>
+  <!-- NOTE: Below is ported from VanillaJS -->
+
   <div class="d-flex align-items-center justify-content-center p-1 p-sm-3 h-100 w-100">
     <div class="m-auto pb-4 w-100">
       <div
@@ -180,37 +182,10 @@ function openChromeShortcuts() {
         </form>
         <!-- options -->
 
-        <div class="d-none my-2 grant-perms">
-          <button
-            class="btn btn-lg btn-success w-100 mb-2 grant-permissions"
-            type="button"
-            data-bs-toggle="tooltip"
-            data-bs-placement="top"
-            data-bs-trigger="hover"
-            data-bs-title="This Extension Requires Host Permissions to Function."
-          >
-            <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions
-          </button>
-          <p class="text-center">
-            <a href="../html/permissions.html">More Information on Permissions</a>
-          </p>
-        </div>
-        <div class="d-none my-3 has-perms">
-          <button
-            class="btn btn-link link-danger revoke-permissions"
-            type="button"
-            data-bs-toggle="tooltip"
-            data-bs-placement="top"
-            data-bs-trigger="hover"
-            data-bs-title="Google Chrome does not allow removing required permissions via this method."
-          >
-            Remove Host Permissions
-          </button>
-        </div>
-        <!-- grant-perms -->
+        <PermissionCheck :show-remove="true" />
 
         <p class="fst-italic small mt-3">
-          <a id="copy-support" href="#0">Copy Support Information</a> for issue reporting.
+          <a id="copy-support" href="#0" @click="copySupport">Copy Support Information</a> for issue reporting.
         </p>
 
         <hr class="mt-0" />
@@ -248,23 +223,7 @@ function openChromeShortcuts() {
   </div>
   <!-- d-flex -->
 
-  <div aria-live="polite" aria-atomic="true" class="">
-    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
-  </div>
-  <!-- toast -->
-
-  <div id="clone" class="d-none">
-    <div
-      class="toast align-items-center border-0"
-      role="alert"
-      aria-live="assertive"
-      aria-atomic="true"
-      data-bs-delay="10000"
-    >
-      <div class="toast-body"></div>
-    </div>
-  </div>
-  <!-- clone -->
+  <ToastAlerts />
 
   <BackToTop />
 </template>

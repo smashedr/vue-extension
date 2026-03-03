@@ -1,0 +1,103 @@
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+
+import { useToast } from '@/utils/useToast'
+const { showToast } = useToast()
+
+const props = withDefaults(
+  defineProps<{
+    closeWindow?: boolean
+    showRemove?: boolean
+  }>(),
+  {
+    closeWindow: false,
+    showRemove: false,
+  },
+)
+
+const hasPerms = ref(false)
+
+const manifest = chrome.runtime.getManifest()
+console.log('host_permissions:', manifest.host_permissions)
+
+async function checkPerms() {
+  hasPerms.value = await chrome.permissions.contains({
+    origins: manifest.host_permissions,
+  })
+  console.log('checkPerms:', hasPerms.value)
+}
+
+async function grantPerms(event: Event) {
+  console.debug('grantPerms:', event)
+  // noinspection ES6MissingAwait
+  requestPerms()
+  if (props.closeWindow) {
+    window.close()
+  }
+}
+
+async function revokePerms(event: Event) {
+  console.debug('revokePerms:', event)
+  const permissions = await chrome.permissions.getAll()
+  console.debug('permissions:', permissions)
+  try {
+    await chrome.permissions.remove({
+      origins: permissions.origins,
+    })
+    await checkPerms()
+  } catch (e) {
+    console.log(e)
+    if (e instanceof Error) showToast(e.toString(), 'danger')
+  }
+}
+
+async function requestPerms() {
+  return await chrome.permissions.request({
+    origins: ['*://*/*'],
+  })
+}
+
+onMounted(() => {
+  checkPerms()
+  chrome.permissions.onAdded.addListener(checkPerms)
+  chrome.permissions.onRemoved.addListener(checkPerms)
+})
+
+onUnmounted(() => {
+  chrome.permissions.onAdded.removeListener(checkPerms)
+  chrome.permissions.onRemoved.removeListener(checkPerms)
+})
+</script>
+
+<template>
+  <div v-if="!hasPerms" class="my-2 text-center">
+    <button
+      class="btn btn-lg btn-success w-100 mb-2 grant-permissions"
+      type="button"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      data-bs-title="This Extension Requires Host Permissions to Function."
+      @click="grantPerms"
+    >
+      <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions
+    </button>
+    <!--<p class="text-center"><a href="../html/permissions.html">More Information on Permissions</a></p>-->
+  </div>
+  <div v-if="hasPerms && props.showRemove" class="my-3">
+    <button
+      class="btn btn-link link-danger revoke-permissions"
+      type="button"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      data-bs-trigger="hover"
+      data-bs-title="Google Chrome does not allow removing required permissions via this method."
+      @click="revokePerms"
+    >
+      Remove Host Permissions
+    </button>
+  </div>
+  <!-- grant-perms -->
+</template>
+
+<!--<style scoped></style>-->

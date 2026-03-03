@@ -68,6 +68,10 @@ jobs:
         with:
           name: artifacts
 
+      - name: "Unzip Artifact"
+        run: |
+          unzip ./*firefox* -d src
+
       - name: "Generate Release Notes"
         id: notes
         run: |
@@ -75,29 +79,36 @@ jobs:
           echo "notes=$notes" >> "$GITHUB_OUTPUT"
 
       - name: "Write AMO Metadata"
-        uses: jsdaniell/create-json@v1.2.3
+        uses: jsdaniell/create-json@b8e77fa01397ca39cc4a6198cc29a3be5481afef # v1.2.3
         with:
           name: "amo-metadata.json"
           json: '{"version": {"release_notes": {"en-US": "${{ steps.notes.outputs.notes }}"}}}'
 
-      - name: "Debug Metadata"
+      - name: "Download Source"
+        run: |
+          echo "${{ github.event.release.tarball_url }}"
+          curl -L "${{ github.event.release.tarball_url }}" -o source.tar.gz
+
+      - name: "Debug"
         continue-on-error: true
         run: |
           ls -lAh .
+          echo "::group::ls src"
+          ls -lAh src
+          echo "::endgroup::"
           echo "::group::cat amo-metadata.json"
-          cat -n "amo-metadata.json"
+          cat -n amo-metadata.json
           echo "::endgroup::"
 
       - name: "Sign Mozilla Addon"
-        env:
-          SOURCE_DIR: src
         run: |
-          unzip ./*firefox* -d "${{ env.SOURCE_DIR }}"
-          npx web-ext sign --api-key="${{ secrets.FIREFOX_API_KEY }}" \
+          npx web-ext sign \
+            --api-key="${{ secrets.FIREFOX_API_KEY }}" \
             --api-secret="${{ secrets.FIREFOX_API_SECRET }}" \
-            --source-dir="${{ env.SOURCE_DIR }}" \
             --channel="${{ env.MOZILLA_CHANNEL }}" \
-            --amo-metadata="amo-metadata.json"
+            --source-dir="src" \
+            --amo-metadata="amo-metadata.json" \
+            --upload-source-code="source.tar.gz"
 
       - name: "Rename Signed Artifact"
         working-directory: web-ext-artifacts
@@ -171,7 +182,7 @@ jobs:
 
       - name: "Commit Action"
         id: commit
-        uses: suzuki-shunsuke/commit-action@f28421acc277a6d6a9c1f94ea449076ad77dba67 # v0.1.0
+        uses: suzuki-shunsuke/commit-action@f12e2d628a4ab72dcefe7890ae07e8dbf1e201b9 # v0.1.1
         with:
           branch: master
           #repository: ${{ github.repository }}

@@ -1,5 +1,7 @@
 // NOTE: Below is ported from VanillaJS
 
+import { showToast } from '@/utils/useToast.ts'
+
 export function openSidePanel(close?: boolean) {
   console.debug('openSidePanel:', close)
   if (chrome.sidePanel) {
@@ -36,16 +38,33 @@ export async function openPopup(event: Event | null) {
   }
 }
 
-export async function openExtPanel(
-  url = 'src/sidepanel/index.html',
-  width = 0,
-  height = 0,
-  type: chrome.windows.CreateType = chrome.windows.CreateType.PANEL,
-): Promise<chrome.windows.Window | undefined> {
-  console.debug('openExtPanel')
+/**
+ * Note: The panel needs the windowResize / window resize event listener...
+ * Note: Firefox needs the onMounted function to set lastPanelID...
+ */
+export async function openExtPanel(close = false) {
+  console.debug('openExtPanel:', close)
+
+  // async function windowResize() {
+  //   // console.debug('windowResize:', event)
+  //   const size = { panelWidth: window.outerWidth, panelHeight: window.outerHeight }
+  //   console.debug('windowResize:', size)
+  //   await chrome.storage.local.set(size).catch((e) => console.warn(e))
+  // }
+
+  // chrome.windows.getCurrent().then((window) => {
+  //   chrome.storage.local.set({ lastPanelID: window.id }).then(() => {
+  //     console.debug(`%c Set lastPanelID: ${window.id}`, 'color: Aqua')
+  //   })
+  // })
+
+  const panelPath = 'src/sidepanel/index.html'
+  const [defaultWidth, defaultHeight] = [340, 600]
+  const type = chrome.windows.CreateType.PANEL
+
   if (!chrome.windows) {
     console.log('Browser does not support: chrome.windows')
-    // showToast('Browser does not support windows', 'danger')
+    showToast('Browser does not support windows', 'danger')
     return
   }
 
@@ -56,13 +75,13 @@ export async function openExtPanel(
   console.debug('lastPanelID:', lastPanelID)
 
   try {
-    const window = await chrome.windows.get(lastPanelID)
+    const panel = await chrome.windows.get(lastPanelID)
     // console.debug('window', window)
-    if (window) {
-      console.debug(`%c Window found: ${window.id}`, 'color: Lime')
-      return await chrome.windows.update(lastPanelID, {
-        focused: true,
-      })
+    if (panel) {
+      console.debug(`%c Window found: ${panel.id}`, 'color: Lime')
+      await chrome.windows.update(lastPanelID, { focused: true })
+      if (close) window.close()
+      return
     }
   } catch (e) {
     console.log(e)
@@ -72,17 +91,16 @@ export async function openExtPanel(
   console.debug('panelWidth:', panelWidth)
   const panelHeight = local.panelHeight as number
   console.debug('panelHeight:', panelHeight)
-  width = width || panelWidth || 340
-  height = height || panelHeight || 600
-  console.debug(`openExtPanel: ${url}`, width, height)
-
-  url = chrome.runtime.getURL(url)
+  const width = panelWidth || defaultWidth
+  const height = panelHeight || defaultHeight
+  console.debug(`width, height:`, width, height)
+  const url = chrome.runtime.getURL(panelPath)
   console.debug('url:', url)
-  const window = await chrome.windows.create({ type, url, width, height })
-  console.debug('window:', window)
-  if (window) {
-    console.debug(`%c Created new window: ${window.id}`, 'color: Magenta')
-    chrome.storage.local.set({ lastPanelID: window.id }).catch((e) => console.warn(e))
-    return window
+  const panel = await chrome.windows.create({ type, url, width, height })
+  console.debug('panel:', panel)
+  if (panel) {
+    console.debug(`%c Created new window: ${panel.id}`, 'color: Magenta')
+    chrome.storage.local.set({ lastPanelID: panel.id }).catch((e) => console.warn(e))
   }
+  if (close) window.close()
 }
