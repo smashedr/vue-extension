@@ -33,4 +33,4 @@ delete merged.side_panel
 
 fs.writeFileSync(distManifestPath, JSON.stringify(merged, undefined, 2))
 
-console.log('build-firefox.js - Updated manifest.json for Firefox')
+console.log(`build-firefox.js - Updated for Firefox: ${distManifestPath}`)
