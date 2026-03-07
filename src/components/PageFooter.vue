@@ -47,4 +47,4 @@ console.debug('manifest:', manifest)
   </div>
 </template>
 
-<style scoped></style>
+<!--<style scoped></style>-->

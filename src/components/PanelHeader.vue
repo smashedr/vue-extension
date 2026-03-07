@@ -1,17 +1,25 @@
 <script setup lang="ts">
-import { openExtPanel, openOptions, openSidePanel } from '@/utils/extension.ts'
+import { openExtPanel, openOptions, openPopup, openSidePanel } from '@/utils/extension.ts'
 import { isMobile } from '@/utils/system.ts'
 
 const props = withDefaults(
   defineProps<{
+    panelButton?: boolean
+    pageButton?: boolean // not implemented
+    sideButton?: boolean
+    popupButton?: boolean
+    optionsButton?: boolean
     closeWindow?: boolean
   }>(),
   {
+    panelButton: true,
+    pageButton: true,
+    sideButton: true,
+    popupButton: true,
+    optionsButton: true,
     closeWindow: false,
   },
 )
-
-console.log('props.closeWindow:', props.closeWindow)
 
 const manifest = chrome.runtime.getManifest()
 </script>
@@ -74,34 +82,34 @@ const manifest = chrome.runtime.getManifest()
           v<span class="version">{{ manifest.version }}</span></a
         >
       </div>
+      <!-- flex-grow-1 -->
 
-      <div v-if="!isMobile" class="ms-1">
-        <a
-          title="Extension Panel"
-          class="btn btn-sm btn-outline-info"
-          role="button"
-          @click="openExtPanel(props.closeWindow)"
-        >
-          <i class="fa-regular fa-window-restore me-1"></i
-        ></a>
+      <div v-if="!isMobile && props.panelButton" class="ms-1">
+        <button title="Extension Panel" class="btn btn-sm btn-outline-info" @click="openExtPanel(props.closeWindow)">
+          <i class="fa-regular fa-window-restore me-1"></i>
+        </button>
       </div>
-      <div v-if="!isMobile" class="ms-1">
-        <a
-          title="Side Panel"
-          class="btn btn-sm btn-outline-info"
-          role="button"
-          @click="openSidePanel(props.closeWindow)"
-        >
-          <i class="fa-solid fa-table-columns"></i
-        ></a>
+
+      <div v-if="!isMobile && props.sideButton" class="ms-1">
+        <button title="Side Panel" class="btn btn-sm btn-outline-info" @click="openSidePanel(props.closeWindow)">
+          <i class="fa-solid fa-table-columns"></i>
+        </button>
       </div>
-      <div class="ms-1">
+
+      <div v-if="!isMobile && props.popupButton" class="ms-1">
+        <button title="Open Popup" class="btn btn-sm btn-outline-info" @click="openPopup()">
+          <i class="fa-solid fa-window-maximize"></i>
+        </button>
+      </div>
+
+      <div v-if="props.optionsButton" class="ms-1">
         <a
           title="Options"
           class="btn btn-sm btn-outline-info"
           role="button"
+          href="/src/options/index.html"
           target="_blank"
-          @click="openOptions(props.closeWindow)"
+          @click.prevent="openOptions(props.closeWindow)"
         >
           <i class="fa-solid fa-gears"></i
         ></a>

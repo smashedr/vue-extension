@@ -1,6 +1,6 @@
 // NOTE: Below is ported from VanillaJS
 
-import { showToast } from '@/utils/useToast.ts'
+import { showToast } from '@/composables/useToast.ts'
 
 export function openSidePanel(close?: boolean) {
   console.debug('openSidePanel:', close)
@@ -33,9 +33,15 @@ export function openOptions(close = false) {
     .catch((e) => console.warn(e))
 }
 
-export async function openPopup(event: Event | null) {
-  console.debug('openPopup:', event)
-  event?.preventDefault()
+export async function openPage(close = false, path = '/src/page/index.html') {
+  console.debug('openPage:', path)
+  const page = chrome.runtime.getURL(path)
+  await activateOrOpen(page)
+  if (close) window.close()
+}
+
+export async function openPopup() {
+  console.debug('openPopup')
   // Note: This fails if popup is already open (ex. double clicks)
   try {
     await chrome.action.openPopup()
@@ -44,27 +50,10 @@ export async function openPopup(event: Event | null) {
   }
 }
 
-/**
- * Note: The panel needs the windowResize / window resize event listener...
- * Note: Firefox needs the onMounted function to set lastPanelID...
- */
 export async function openExtPanel(close = false) {
   console.debug('openExtPanel:', close)
 
-  // async function windowResize() {
-  //   // console.debug('windowResize:', event)
-  //   const size = { panelWidth: window.outerWidth, panelHeight: window.outerHeight }
-  //   console.debug('windowResize:', size)
-  //   await chrome.storage.local.set(size).catch((e) => console.warn(e))
-  // }
-
-  // chrome.windows.getCurrent().then((window) => {
-  //   chrome.storage.local.set({ lastPanelID: window.id }).then(() => {
-  //     console.debug(`%c Set lastPanelID: ${window.id}`, 'color: Aqua')
-  //   })
-  // })
-
-  const panelPath = 'src/sidepanel/index.html'
+  const panelPath = 'src/popout/index.html'
   const [defaultWidth, defaultHeight] = [390, 600]
   const type = chrome.windows.CreateType.POPUP
 
@@ -74,7 +63,11 @@ export async function openExtPanel(close = false) {
     return
   }
 
-  const local = await chrome.storage.local.get(['lastPanelID'])
+  const local = await chrome.storage.local.get([
+    'lastPanelID',
+    'panelWidth',
+    'panelHeight',
+  ])
   console.debug('local:', local)
 
   const lastPanelID = local.lastPanelID as number
@@ -109,6 +102,24 @@ export async function openExtPanel(close = false) {
     chrome.storage.local.set({ lastPanelID: panel.id }).catch((e) => console.warn(e))
   }
   if (close) window.close()
+}
+
+export async function activateOrOpen(url: string, open = true) {
+  console.debug('activateOrOpen:', url, open)
+  // Note: To Get Tab from Tabs (requires host permissions or tabs)
+  const tabs = await chrome.tabs.query({ currentWindow: true })
+  console.debug('tabs:', tabs)
+  for (const tab of tabs) {
+    if (tab.url === url) {
+      console.debug('%cTab found, activating:', 'color: Lime', tab)
+      return await chrome.tabs.update(tab.id, { active: true })
+    }
+  }
+  if (open) {
+    console.debug('%cTab not found, opening url:', 'color: Yellow', url)
+    return await chrome.tabs.create({ active: true, url })
+  }
+  console.warn('tab not found and open not set!')
 }
 
 // export async function checkPerms(manifest: chrome.runtime.Manifest) {

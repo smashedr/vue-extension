@@ -29,23 +29,23 @@ jobs:
           node-version: 24
 
       - name: "Install"
-        run: |
-          npm ci
+        run: npm ci
 
-      - name: "Update Manifest Version"
+      - name: "Update Version"
         if: ${{ github.event_name == 'release' }}
         uses: cssnr/update-json-value-action@v2
         with:
           values: ${{ inputs.version }}
+          file: package.json
 
-      - name: "Debug Manifest"
-        continue-on-error: true
+      - name: "Verify Version"
+        if: ${{ github.event_name == 'release' }}
         run: |
-          cat -n manifest.json
+          yq -e '.version | test("${{ inputs.version }}")' package.json
+          cat -n package.json
 
       - name: "Build"
-        run: |
-          npm run build:all
+        run: npm run build:all
 
       - name: "Upload to Actions"
         uses: actions/upload-artifact@v6

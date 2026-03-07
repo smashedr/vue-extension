@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { openOptions } from '@/utils/extension.ts'
+import { useTitle } from '@/composables/useTitle.ts'
 
 import BackToTop from '@/components/BackToTop.vue'
 import PermsCheck from '@/components/PermsCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
-import FooterPanel from '@/components/FooterPanel.vue'
+import PageFooter from '@/components/PageFooter.vue'
 
 console.debug('%c options/App.vue', 'color: Lime')
 
@@ -14,13 +14,11 @@ async function onAdded(permissions: chrome.permissions.Permissions) {
   console.debug('onAdded:', permissions)
   if (document.hasFocus()) {
     await chrome.runtime.openOptionsPage()
+    window.close()
   }
-  window.close()
 }
 
-const manifest = chrome.runtime.getManifest()
-console.debug('manifest:', manifest)
-document.title = `${manifest.name} Permissions`
+useTitle('Permissions')
 </script>
 
 <template>
@@ -33,7 +31,7 @@ document.title = `${manifest.name} Permissions`
             <h1>GeoImage</h1>
           </div>
 
-          <PermsCheck :show-alert="true" :show-remove="true" />
+          <PermsCheck :show-alert="true" class="my-2" />
 
           <p>To download an image on Chrome for upload to the API, host permissions are required.</p>
           <a class="btn btn-lg btn-outline-info w-100 mb-3" href="/src/options/index.html">
@@ -42,14 +40,13 @@ document.title = `${manifest.name} Permissions`
 
           <hr class="mt-0" />
 
-          <FooterPanel />
+          <PageFooter />
         </div>
       </div>
     </div>
   </div>
 
   <ToastAlerts />
-
   <BackToTop />
 </template>
 
