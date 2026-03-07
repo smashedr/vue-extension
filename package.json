@@ -10,6 +10,7 @@
     "android": "web-ext run -t firefox-android -s dist --firefox-apk org.mozilla.firefox_beta --adb-device",
     "lint:web-ext": "npx web-ext lint --self-hosted --source-dir dist",
     "clean": "rm -rf dist",
+    "clean:all": "rm -rf dist && rm -rf web-ext-artifacts",
     "build": "vue-tsc -b && vite build",
     "build:all": "npm run build:chrome && npm run build:firefox",
     "build:chrome": "npm run build && npm run pkg:chrome",
