@@ -18,6 +18,8 @@ async function onAdded(permissions: chrome.permissions.Permissions) {
   }
 }
 
+const manifest = chrome.runtime.getManifest()
+
 useTitle('Permissions')
 </script>
 
@@ -27,8 +29,15 @@ useTitle('Permissions')
       <div class="col-xl-6 col-md-8 col-12 m-auto">
         <div class="card p-3 text-center">
           <div class="d-flex justify-content-center align-items-center">
-            <img src="/images/logo48.png" class="me-2" height="48" width="48" alt="GeoImage" title="GeoImage" />
-            <h1>GeoImage</h1>
+            <img
+              src="/images/logo48.png"
+              class="me-2"
+              height="48"
+              width="48"
+              :alt="manifest.name"
+              :title="manifest.name"
+            />
+            <h1>{{ manifest.name }}</h1>
           </div>
 
           <PermsCheck :show-alert="true" class="my-2" />
