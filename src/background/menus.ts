@@ -28,7 +28,7 @@ export async function onClicked(
   if (ctx.menuItemId === 'openOptions') {
     await chrome.runtime.openOptionsPage()
   } else if (ctx.menuItemId === 'openPopup') {
-    await openPopup(null)
+    await openPopup()
   } else if (ctx.menuItemId === 'openExtPanel') {
     await openExtPanel()
   } else if (ctx.menuItemId === 'openSidePanel') {

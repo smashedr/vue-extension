@@ -1,29 +1,26 @@
 <script setup lang="ts">
-import { copySupport } from '../utils/options.ts'
-import { isMobile } from '@/utils/system.ts'
+import { useTitle } from '@/composables/useTitle.ts'
+import { copySupport } from '@/utils/options.ts'
+import { isFirefox, isMobile } from '@/utils/system.ts'
 
 import BackToTop from '@/components/BackToTop.vue'
 import PermsCheck from '@/components/PermsCheck.vue'
 import ToastAlerts from '@/components/ToastAlerts.vue'
-import OptionsControls from '@/components/OptionsControls.vue'
+import OptionsForm from '@/components/OptionsForm.vue'
 import KeyboardShortcuts from '@/components/KeyboardShortcuts.vue'
-import FooterPanel from '@/components/FooterPanel.vue'
+import PageFooter from '@/components/PageFooter.vue'
 
 console.debug('%c options/App.vue', 'color: Lime')
 
 const manifest = chrome.runtime.getManifest()
-console.debug('manifest:', manifest)
-document.title = `${manifest.name} Options`
+
+useTitle('Options')
 </script>
 
 <template>
   <div class="d-flex align-items-center justify-content-center p-1 p-sm-3 h-100 w-100">
     <div class="m-auto pb-4 w-100">
-      <div
-        id="options-wrapper"
-        class="border border-1 rounded rounded-3 p-2 p-sm-3 m-auto w-100"
-        style="max-width: 767px"
-      >
+      <div id="options-wrapper" class="glass-outline blur rounded rounded-3 p-2 p-sm-3 m-auto w-100">
         <div class="d-flex flex-row justify-content-center align-items-center">
           <img
             src="/images/logo48.png"
@@ -71,25 +68,23 @@ document.title = `${manifest.name} Options`
           <hr class="w-100 my-0" />
         </div>
 
-        <OptionsControls />
+        <OptionsForm />
 
-        <PermsCheck :show-info="true" :show-remove="true" />
+        <PermsCheck :show-info="true" :show-remove="isFirefox" class="my-3" />
 
         <p class="fst-italic small mt-3">
-          <a id="copy-support" href="#0" @click="copySupport">Copy Support Information</a> for issue reporting.
+          <a id="copy-support" href="#" @click.prevent="copySupport">Copy Support Information</a> for issue reporting.
         </p>
 
         <hr class="mt-0" />
 
-        <FooterPanel />
-
-        <!-- #options-wrapper -->
+        <PageFooter />
       </div>
+      <!-- #options-wrapper -->
     </div>
   </div>
 
   <ToastAlerts />
-
   <BackToTop />
 </template>
 

@@ -21,7 +21,7 @@
 
 - [Install](#install)
 - [Features](#features)
-- [Development](#development)
+- [Configuration](#configuration)
 - [Support](#support)
 - [Contributing](#contributing)
 
@@ -37,23 +37,40 @@ Vue 3 and Vite plus CRXJS Web Extension Template for Chrome, Firefox, and Firefo
 [![Chromium](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/chromium_48.png)](https://chromewebstore.google.com/detail/ifefifghpkllfibejafbakmflidjcjfp)
 
 All **Chromium** Based Browsers can install the extension from the
-[Chrome Web Store](https://chromewebstore.google.com/detail/ifefifghpkllfibejafbakmflidjcjfp).
+[Chrome Web Store](https://chromewebstore.google.com/detail/geoimage/ifefifghpkllfibejafbakmflidjcjfp).
 
-- Download a [Chrome Release](https://github.com/smashedr/vue-extension/releases/latest/download/vue_extension-chrome.crx) from GitHub
-- Download a [Firefox Release](https://github.com/smashedr/vue-extension/releases/latest/download/vue_extension-firefox.xpi) from GitHub
+- Download a [Chrome Release](https://github.com/smashedr/vue-extension/releases/latest/download/geoimage-chrome.crx) from GitHub
+- Download a [Firefox Release](https://github.com/smashedr/vue-extension/releases/latest/download/geoimage-firefox.xpi) from GitHub
+
+[![Android QR Code](https://raw.githubusercontent.com/smashedr/repo-images/refs/heads/master/geo-image/qr-code-android.png)](https://github.com/smashedr/vue-extension/releases/latest/download/geoimage-firefox.xpi)
+
+_Note: To install self-hosted extensions on Android you must enable a hidden menu item:_
+[_https://extensionworkshop.com/documentation/publish/install-self-distributed_](https://extensionworkshop.com/documentation/publish/install-self-distributed/#install-addon-from-file-android)
 
 ## Features
 
-- Fucking Amazing
-- Hands Down
-- No Questions
-- Asked
+- Uses Gemini API
+- Stores Response Data
+- Provides a GeoHack Link
+- Has Panel, Popup, and Side Panel.
 
-## Development
+> [!TIP]  
+> **Don't see your feature?**
+> Submit a [Feature Request](https://github.com/smashedr/vue-extension/issues/new?template=1-feature.yaml).
 
-See the [CONTRIBUTING.md](#contributing-ov-file).
+## Configuration
 
-The guide is not complete, but vue+vite just works...
+First, Open the Options by:
+
+- Extension Toolbar Icon
+- Right-Click Context Menu
+- Keyboard Shortcut (Alt+Shift+O)
+
+Then, add your Gemini API Key. Done.
+
+To use, right-click on an image: `GeoImage` > `Analyze Image`
+
+Additionally, you can paste an image link into the input and `Go`.
 
 ## Support
 
@@ -105,3 +122,9 @@ For a full list of current projects visit: [https://cssnr.github.io/](https://cs
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=smashedr/vue-extension&type=date&legend=bottom-right" />
  </picture>
 </a>
+
+## Development
+
+See the [CONTRIBUTING.md](#contributing-ov-file).
+
+The guide is not complete, but vue+vite just works...

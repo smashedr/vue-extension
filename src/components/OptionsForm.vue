@@ -3,8 +3,6 @@ import { onMounted } from 'vue'
 import { saveOptions, updateOptions } from '@/utils/options.ts'
 import { isMobile } from '@/utils/system.ts'
 
-chrome.storage.onChanged.addListener(onChanged)
-
 const props = withDefaults(
   defineProps<{
     compact?: boolean
@@ -13,6 +11,8 @@ const props = withDefaults(
     compact: false,
   },
 )
+
+chrome.storage.onChanged.addListener(onChanged)
 
 function onChanged(changes: object, namespace: string) {
   for (const [key, _] of Object.entries(changes)) {
@@ -29,7 +29,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <form class="options">
+  <form>
     <div v-if="!props.compact" class="row mb-2">
       <div class="col-12 col-sm-8 mb-2">
         <label for="testInput" class="form-label"><i class="fa-regular fa-keyboard me-1"></i> Test Input</label>
